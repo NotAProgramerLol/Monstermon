@@ -27,7 +27,10 @@ class Monster:
     def get_moves(self):
         return self.moves
 
-    def lose_hp(self, damage):
+    def lose_hp(self, damage: int) -> int:
         self.stats["hp"] = self.stats["hp"] - damage
+
         if self.stats["hp"] <= 0:
-            return False
+            return 0
+
+        return self.stats["hp"]
