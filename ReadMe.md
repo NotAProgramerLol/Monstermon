@@ -7,3 +7,16 @@ I also have not implemented things like hit chance, dodging, mana (since i haven
 This game is primarily made to show of programming skills (code when writing is still a bit of a mess but thats "fine").
 
 If I find the motivation to keep developing this game then I will probably change most of the code base and use a better tui library. I can probably also use the current one but it will still mean i will need to rewrite my code since i did not separate my back-end and front-end correctly since in some functions i also put the front-end (dialogs) code.
+
+
+## Running the game
+
+To run this game you need to have `python` and `pipenv` installed.
+Sync the dependencies with:
+```shell
+make dependencies
+```
+Now the game should launch when using the following command:
+```shell
+make run
+```
