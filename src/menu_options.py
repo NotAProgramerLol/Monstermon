@@ -12,6 +12,7 @@ from .game_logic import (
     calculate_order,
     player_lost,
     player_won,
+    battle_sequence,
 )
 from .classes.characters import Player
 
@@ -25,38 +26,17 @@ def fight(player_a: Player, player_b: Player):
 
     """
 
-    monster_a = player_a.get_partner()
-    monster_b = player_b.get_partner()
-
-    order = calculate_order(monster_a, monster_b)
+    order = calculate_order(player_a.get_partner(), player_b.get_partner())
 
     if order:
-        # Turn of `monster_a`
-        monster_b_damage = calculate_damage(monster_a, monster_b)
-        if not monster_b.lose_hp(monster_b_damage):
-            if player_a.get_main_character():
-                player_won()
+        battle_sequence(player_a, player_b)
+        return
 
-            player_lost()
-
-        # Turn of `monster_b`
-        monster_a_damage = calculate_damage(monster_b, monster_a)
-        if not monster_a.lose_hp(monster_a_damage):
-            if player_b.get_main_character():
-                player_won()
-
-            player_lost()
-
-        message_dialog(
-            title="Fighting",
-            text=f"""{monster_a.get_name()} went first and did {monster_b_damage} damage to {monster_b.get_name()}.
-{monster_b.get_name()} went second and did {monster_a_damage} damage to {monster_a.get_name()}.
-{monster_a.get_name()} has {monster_a.get_hp()} HP
-{monster_b.get_name()} has {monster_b.get_hp()} HP""",
-        ).run()
+    battle_sequence(player_b, player_a)
 
 
-def change_monster(player):
+
+def change_monster(player: Player):
     new_partner = radiolist_dialog(
         title="Choose a monster!",
         text="Who do you want to choose?",
@@ -83,7 +63,7 @@ def change_monster(player):
         change_monster(player)
 
 
-def flee(player):
+def flee(player: Player):
     result = yes_no_dialog(
         title="Flee.", text="This will quit the game!\nAre you sure?"
     ).run()

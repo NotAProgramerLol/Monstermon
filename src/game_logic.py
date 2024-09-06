@@ -4,6 +4,7 @@ import sys
 from prompt_toolkit.shortcuts import message_dialog
 
 from .classes.monster import Monster
+from .classes.characters import Player
 
 
 def calculate_order(monster_a: Monster, monster_b: Monster):
@@ -46,3 +47,32 @@ def player_lost():
         text="Your partner died do you really want to keep going?",
     ).run()
     sys.exit()
+
+
+def battle_sequence(player_a: Player, player_b: Player):
+    monster_a = player_a.get_partner()
+    monster_b = player_b.get_partner()
+
+    # Turn of `monster_a`
+    monster_b_damage = calculate_damage(monster_a, monster_b)
+    if not monster_b.lose_hp(monster_b_damage):
+        if player_a.get_main_character():
+            player_won()
+
+        player_lost()
+
+    # Turn of `monster_b`
+    monster_a_damage = calculate_damage(monster_b, monster_a)
+    if not monster_a.lose_hp(monster_a_damage):
+        if player_b.get_main_character():
+            player_won()
+
+        player_lost()
+
+    message_dialog(
+        title="Fighting",
+        text=f"""{monster_a.get_name()} went first and did {monster_b_damage} damage to {monster_b.get_name()}.
+{monster_b.get_name()} went second and did {monster_a_damage} damage to {monster_a.get_name()}.
+{monster_a.get_name()} has {monster_a.get_hp()} HP
+{monster_b.get_name()} has {monster_b.get_hp()} HP""",
+    ).run()
